@@ -197,7 +197,26 @@ d.rast rf_classification
 d.legend raster=rf_classification title="Random Forest: 2018" title_fontsize=14 font="Helvetica" fontsize=12 bgcolor=white border_color=white
 d.out.file output=RF_Mozambique_2018 format=jpg --overwrite
 
-
+# 2023
+g.region raster=L9_2023_01 -p
+# Generate some training pixels from a previously done land cover classification:
+r.random input=L8_2015_cluster_classes seed=100 npoints=1000 raster=training_pixels --overwrite
+# Next, we create the imagery group with all Landsat-8 OLI/TIRS 7 (2000) bands:
+i.group group=L9_2023 input=L9_2023_01,L9_2023_02,L9_2023_03,L9_2023_04,L9_2023_05,L9_2023_06,L9_2023_07 --overwrite
+#  Then use these training pixels to perform a classification on the target Landsat image and train a random forest classification model using r.learn.train
+r.learn.train group=L9_2023 training_map=training_pixels model_name=RandomForestClassifier n_estimators=500 save_model=rf_model.gz --overwrite
+# perform prediction using r.learn.predict
+r.learn.predict group=L9_2023 load_model=rf_model.gz output=rf_classification --overwrite
+# check raster categories - they are automatically applied to the classification output
+r.category rf_classification
+# copy color scheme from landclass training map to result
+r.colors rf_classification raster=L9_2023_classes_roi
+# display
+d.mon wx1
+r.colors rf_classification color=plasma -e
+d.rast rf_classification
+d.legend raster=rf_classification title="Random Forest: 2023" title_fontsize=14 font="Helvetica" fontsize=12 bgcolor=white border_color=white
+d.out.file output=RF_Mozambique_2023 format=jpg --overwrite
 
 
 # Then we use these training pixels to perform a classification on recent Landsat-8 2022 image:
