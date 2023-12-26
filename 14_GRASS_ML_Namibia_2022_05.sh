@@ -19,15 +19,22 @@ g.list rast
 #
 # ----CREATING COLOR COMPOSITES-------------------------->
 # false color
-r.composite blue=L8_2022_M_07 green=L8_2022_M_05 red=L8_2022_M_03 output=L8_2022_M_753 --overwrite
+r.composite blue=L8_2022_M_03 green=L8_2022_M_05 red=L8_2022_M_07 output=L8_2022_M_357 --overwrite
+g.region raster=L8_2022_M_07 -o
 d.mon wx0
-d.rast L8_2022_M_753
-d.out.file output=Namibia_753 format=jpg --overwrite
+d.rast L8_2022_M_357
+d.out.file output=Namibia_M_357 format=jpg --overwrite
 # false color: NIR band B05 in the red channel, red band B04 in the green channel and green band B03 in the blue channel
 r.composite blue=L8_2022_M_03 green=L8_2022_M_04 red=L8_2022_M_05 output=L8_2022_M_345 --overwrite
+g.region raster=L8_2022_M_03 -o
 d.mon wx0
 d.rast L8_2022_M_345
-d.out.file output=Namibia_345 format=jpg --overwrite
+d.out.file output=Namibia_A_345 format=jpg --overwrite
+# true color
+r.composite blue=L8_2022_M_02 green=L8_2022_M_03 red=L8_2022_M_04 output=L8_2022_M_234 --overwrite
+d.mon wx0
+d.rast L8_2022_M_234
+d.out.file output=Namibia_A_234 format=jpg --overwrite
 
 # ---CLUSTERING AND CLASSIFICATION------------------->
 # grouping data by i.group
